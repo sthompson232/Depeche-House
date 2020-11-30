@@ -1,11 +1,11 @@
 from datetime import datetime
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager, login_required, login_user, current_user
+from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 
 app = Flask(__name__)
@@ -17,10 +17,19 @@ db = SQLAlchemy(app)
 #Allows users to login
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
+#user loader keeps the user logged in during the session
+@login_manager.user_loader
+#LOADS THE USER
+def load_user(user_id):
+    return User.query.get(int(user_id))
+    
 ###################################################################################################
 
 #DATABASE
+
+#TABLE CONTAINING ALL USER INFORMATION IN THE SQLITE DATABASE
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(10), index=True, unique=True)
@@ -31,9 +40,11 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return "<User {}>".format(self.username)
 
+#METHOD TO SET HASHED PASSWORD (USED WHEN FIRST REGISTERING A PASSWORD)
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
+#METHOD TO CHECK HASHED PASSWORD (USED WHEN LOGGING IN)
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
@@ -41,13 +52,16 @@ class User(UserMixin, db.Model):
 ####################################################################################################
 
 #FORMS
+
+#REGISTRATION FORM 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=12)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=5, max=15)])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
+#LOGIN FORM
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -57,19 +71,7 @@ class LoginForm(FlaskForm):
 
 ####################################################################################################
 
-#user loader keeps the user logged in during the session
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-
 #ROUTES
-
-
-@app.route('/', methods=["GET", "POST"])
-def index():
-    return render_template('index.html')
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -84,11 +86,13 @@ def register():
         #add and commit the db change 
         db.session.add(new_user)
         db.session.commit()
+        flash("Congratulations, you have registered an account successfully.")
         return redirect(url_for('index', _external=True, _scheme='http'))
     return render_template('register.html', register_form=register_form)
 
 
 
+#LOGIN PAGE ROUTE
 @app.route('/login', methods=["GET", "POST"])
 def login():
     login_form = LoginForm()
@@ -99,13 +103,32 @@ def login():
         #if password matches the given email then line after logs user in
         if user and user.check_password(login_form.password.data):
             login_user(user)
-            return redirect(url_for('index', _external=True, _scheme='http'))
+            flash("Logged in successfully.")
+        else:
+            flash('Login Unsuccessful.')
     return render_template('login.html', login_form=login_form)
 
 
 
-@app.route('/user/<username>')
+#INDEX HOME PAGE, THIS IS THE ONLY PAGE THAT DOESNT REQUIRE AN ACCOUNT
+@app.route('/', methods=["GET", "POST"])
+def index():
+    current_users = User.query.all()
+    return render_template('index.html', current_users=current_users)
+
+
+
+#LOGOUT ROUTE WHICH AUTO REDIRECTS ON LOGOUT
+@app.route('/logout')
 @login_required
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+
+#ROUTE FOR USER AREA
+@app.route('/user', methods=["GET", "POST"])
+@login_required
+def user():
+    return render_template('user.html')
