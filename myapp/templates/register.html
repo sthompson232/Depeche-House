@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>REGISTER PAGE</h1>
+
+<form method="post">
+    {{ register_form.hidden_tag() }}
+    {{ register_form.username.label }}
+    {{ register_form.username }}
+    <br>
+    {{ register_form.email.label }}
+    {{ register_form.email }}
+    <br>
+    {{ register_form.password.label }}
+    {{ register_form.password }}
+    <br>
+    {{ register_form.password2.label }}
+    {{ register_form.password2 }}
+    <br>
+    {{ register_form.submit() }}
+
+
+</form>
+
+{% endblock %}
