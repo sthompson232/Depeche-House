@@ -5,7 +5,7 @@ from flask_login import UserMixin, LoginManager, login_required, login_user, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 
 
 app = Flask(__name__)
@@ -13,6 +13,10 @@ app.config['SECRET_KEY'] = 'enter_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///depeche_house.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+#turns debug mode on if running with python
+if __name__ =='__main__':
+    app.run(debug=True)
 
 #Allows users to login
 login_manager = LoginManager()
@@ -55,11 +59,29 @@ class User(UserMixin, db.Model):
 
 #REGISTRATION FORM 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=12)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=25)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=5, max=15)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=4, max=25)])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('This username has already been taken. Please choose another one.')
+        if len(username.data) < 4 or len(username.data) > 25:
+            raise ValidationError('Your username must contain between 4 to 25 characters.')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('This email has already been taken. Please choose another one.')
+
+    def validate_password(self, password):
+        if len(password.data) < 4 or len(password.data) > 25:
+            raise ValidationError('Your password must be between 4 to 25 characters long.')
+
+
 
 #LOGIN FORM
 class LoginForm(FlaskForm):
@@ -87,7 +109,6 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash("Congratulations, you have registered an account successfully.")
-        return redirect(url_for('index', _external=True, _scheme='http'))
     return render_template('register.html', register_form=register_form)
 
 

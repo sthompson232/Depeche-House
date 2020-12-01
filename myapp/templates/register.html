@@ -19,8 +19,11 @@
     {{ register_form.password2 }}
     <br>
     {{ register_form.submit() }}
-
-
 </form>
+{% with message = get_flashed_messages() %}
+{% if message %}
+{{ message }}
+{% endif %}
+{% endwith %}
 
 {% endblock %}
