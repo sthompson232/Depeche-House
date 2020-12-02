@@ -1,7 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, flash
-from flask_login import login_required, login_user, logout_user, LoginManager
+from flask import Flask, render_template, redirect, url_for, flash, request
+from flask_login import login_required, login_user, logout_user, LoginManager, current_user
 from depeche_house.forms import LoginForm, RegistrationForm
-from depeche_house.models import User
+from depeche_house.models import User, Post
 from depeche_house import app, db
 
 #Allows users to login
@@ -20,6 +20,8 @@ def load_user(user_id):
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     register_form = RegistrationForm()
     #if necessary info has been submitted on the register form:
     if register_form.validate_on_submit():
@@ -30,7 +32,7 @@ def register():
         #add and commit the db change 
         db.session.add(new_user)
         db.session.commit()
-        flash("Congratulations, you have registered an account successfully.")
+        flash(f'Congratulations {register_form.username.data}, you have successfully registered an account.', 'success')
     return render_template('register.html', register_form=register_form)
 
 
@@ -38,6 +40,8 @@ def register():
 #LOGIN PAGE ROUTE
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     login_form = LoginForm()
     #if necessary info has been submitted on login form:
     if login_form.validate_on_submit():
@@ -46,9 +50,11 @@ def login():
         #if password matches the given email then line after logs user in
         if user and user.check_password(login_form.password.data):
             login_user(user)
-            flash("Logged in successfully.")
+            next_page = request.args.get('next')
+            flash("Logged in successfully.", 'success')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
-            flash('Login Unsuccessful.')
+            flash('Login Unsuccessful. Please check Username and Password.', 'danger')
     return render_template('login.html', login_form=login_form)
 
 
@@ -68,6 +74,14 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
+
+#ROUTE FOR PAGE WITH POSTS
+@app.route('/home', methods=["GET", "POST"])
+@login_required
+def home():
+    posts = Post.query.all()
+    return render_template('home.html', posts=posts)
 
 
 #ROUTE FOR USER AREA

@@ -7,21 +7,38 @@
 <form method="post">
     {{ login_form.hidden_tag() }}
 
+<!-- EMAIL -->
     {{ login_form.email.label }}
     {{ login_form.email }}
+    {% if login_form.email.errors %}
+        {% for error in login_form.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    {% endif %}
     <br>
+
+<!-- PASSWORD -->
     {{ login_form.password.label }}
     {{ login_form.password }}
+    {% if login_form.password.errors %}
+        {% for error in login_form.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    {% endif %}
     <br>
+
+<!-- REMEMBER ME -->
     {{ login_form.remember_me }}
     {{ login_form.remember_me.label }}
     <br>
+
+<!-- SUBMIT -->
     {{ login_form.submit() }}
 </form>
 <p><a href="{{ url_for('logout') }}">Logout</a></p>
-{% with message = get_flashed_messages() %}
+<!-- {% with message = get_flashed_messages() %}
 {% if message %}
 {{ message }}
 {% endif %}
-{% endwith %}
+{% endwith %} -->
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>HOME PAGE</h1>
+{% for post in posts %}
+    {{ post }}
+{% endfor %}
+
+{% endblock %}
