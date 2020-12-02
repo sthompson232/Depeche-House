@@ -14,4 +14,3 @@ if __name__ =='__main__':
 
 
 from depeche_house import routes
-from depeche_house.models import User

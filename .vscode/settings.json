@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\Sam\\anaconda3\\python.exe",
+    "python.pythonPath": "c:\\Users\\Sam\\Documents\\GitHub\\Depeche House\\myapp\\Scripts\\python.exe",
 
     "python.linting.pylintArgs": [
         "--load-plugins",
