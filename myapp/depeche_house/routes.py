@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import login_required, login_user, logout_user, LoginManager, current_user
-from depeche_house.forms import LoginForm, RegistrationForm
+from depeche_house.forms import LoginForm, RegistrationForm, UpdateProfileForm
 from depeche_house.models import User, Post
 from depeche_house import app, db
 
@@ -88,4 +88,6 @@ def home():
 @app.route('/user', methods=["GET", "POST"])
 @login_required
 def user():
-    return render_template('user.html')
+    update_form = UpdateProfileForm()
+    image_file = url_for('static', filename='profile_pics/' + current_user.profile_pic)
+    return render_template('user.html', image_file=image_file, update_form=update_form)
