@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>VIEW POST</h1>
+
+<p>Edit or delete your post here</p>
+
+    <img src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}">
+    {{ post.author.username }}
+    {{ post.date_posted.strftime('%d/%m/%Y') }}
+    {{ post.title }}
+    {{ post.content }}
+    {% if post.author == current_user %}
+    <a href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+    <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</button>
+    {% endif %}
+
+{% endblock %}

@@ -9,7 +9,7 @@
     <img src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}">
     {{ post.author.username }}
     {{ post.date_posted.strftime('%d/%m/%Y') }}
-    {{ post.title }}
+    <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
     {{ post.content }}
 {% endfor %}
 
