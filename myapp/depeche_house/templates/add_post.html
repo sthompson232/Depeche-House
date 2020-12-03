@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>ADD POST</h1>
+
+<form method="post">
+    {{ post_form.hidden_tag() }}
+
+<!-- TITLE -->
+    {{ post_form.title.label }}
+    {{ post_form.title }}
+    {% if post_form.title.errors %}
+        {% for error in post_form.title.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+    <br>
+
+<!-- PASSWORD -->
+    {{ post_form.text.label }}
+    {{ post_form.text }}
+    {% if post_form.text.errors %}
+        {% for error in post_form.text.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+    <br>
+
+
+<!-- SUBMIT -->
+    {{ post_form.submit() }}
+</form>
+
+
+{% endblock %}

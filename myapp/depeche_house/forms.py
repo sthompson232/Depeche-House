@@ -1,10 +1,13 @@
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from depeche_house.models import User
 
 #FORMS
+
+
 
 #REGISTRATION FORM 
 class RegistrationForm(FlaskForm):
@@ -25,6 +28,8 @@ class RegistrationForm(FlaskForm):
         if user_email:
             raise ValidationError('This email has already been taken. Please choose another one.')
 
+
+
 #LOGIN FORM
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -32,10 +37,13 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+
+
 #UPDATE PROGILE FORM
 class UpdateProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=25)])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    profile_pic = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
@@ -46,7 +54,16 @@ class UpdateProfileForm(FlaskForm):
                 raise ValidationError('This username has already been taken. Please choose another one.')
 
     def validate_email(self, email):
-        if username.data != current_user.username:
+        if email.data != current_user.email:
             user_email = User.query.filter_by(email=email.data).first()
             if user_email:
                 raise ValidationError('This email has already been taken. Please choose another one.')
+
+
+
+#ADD POST FORM
+
+class AddPostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    text = TextAreaField('What would you like to say?', validators=[DataRequired()])
+    submit = SubmitField('Post')
