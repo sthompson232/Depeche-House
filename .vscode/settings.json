@@ -1,10 +1,4 @@
 {
-    "python.pythonPath": "c:\\Users\\Sam\\Documents\\GitHub\\Depeche House\\myapp\\Scripts\\python.exe",
-
-    "python.linting.pylintArgs": [
-        "--load-plugins",
-        "pylint_flask_sqlalchemy",
-        "pylint_flask"       
-    ]
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }
-
