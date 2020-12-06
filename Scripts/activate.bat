@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Sam\Documents\GitHub\depeche _house\depeche_house
+set VIRTUAL_ENV=C:\Users\Sam\Documents\GitHub\depeche_house
 
 if not defined PROMPT set PROMPT=$P$G
 
