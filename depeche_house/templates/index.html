@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
+<br>
+<br>
+<br>
+<div class="view" style="background-image: url(../static/images/joss-woodhead-tfEoT92EYlo-unsplash.jpg); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+    <div class="container">
+        <div class="row">
+            <h1>INDEX PAGE</h1>
 
-<h1>INDEX PAGE</h1>
+            <p>Welcome to Depeche House! To access this website you will need to create an account. On this site you will be able to create a basic user account and post to a global feed which can be accessed by all other users!</p>
+            
+            <p>We currently have {{ current_users | length }} users!</p>
+            <p>{{ current_users }}</p>
+        </div>
+    </div>
+</div>
 
-<p>Welcome to Depeche House! To access this website you will need to create an account. On this site you will be able to create a basic user account and post to a global feed which can be accessed by all other users!</p>
 
-<p>We currently have {{ current_users | length }} users!</p>
-<p>{{ current_users }}</p>
 {% endblock %}
