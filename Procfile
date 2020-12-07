@@ -1,1 +1,1 @@
-web: gunicorn --chdir depeche_house __init__:app
+web: gunicorn --chdir depeche_house run:app
