@@ -36,6 +36,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash(f'Congratulations {register_form.username.data}, you have successfully registered an account.', 'success')
+        return redirect(url_for('home'))
     return render_template('register.html', register_form=register_form)
 
 
