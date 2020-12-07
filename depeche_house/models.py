@@ -8,7 +8,7 @@ from flask_login import UserMixin
 #TABLE CONTAINING ALL USER INFORMATION IN THE SQLITE DATABASE
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), index=True, unique=True, nullable=False)
+    username = db.Column(db.String(10), index=True, unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, index=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     joined_at = db.Column(db.DateTime(), default=datetime.utcnow, index=True, nullable=False)
