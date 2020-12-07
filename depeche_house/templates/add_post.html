@@ -2,35 +2,47 @@
 
 {% block content %}
 
-<h1>{{ legend }}</h1>
+<br>
+<br>
+<br>
 
-<form method="post">
-    {{ post_form.hidden_tag() }}
+<div class="content-section">
+    <form method="post">
+        {{ post_form.hidden_tag() }}
 
-<!-- TITLE -->
-    {{ post_form.title.label }}
-    {{ post_form.title }}
-    {% if post_form.title.errors %}
-        {% for error in post_form.title.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
-    {% endif %}
-    <br>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <div class="form-group">
+            <!-- TITLE -->
+                {{ post_form.title.label (class="form-control-label") }}
+                {{ post_form.title (class="form-control form-control-lg")}}
+                {% if post_form.title.errors %}
+                {{ post_form.title(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                    {% for error in post_form.title.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <br>
 
-<!-- PASSWORD -->
-    {{ post_form.text.label }}
-    {{ post_form.text }}
-    {% if post_form.text.errors %}
-        {% for error in post_form.text.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
-    {% endif %}
-    <br>
+            <!-- PASSWORD -->
+                {{ post_form.text.label (class="form-control-label") }}
+                {{ post_form.text (class="form-control form-control-lg")}}
+                {% if post_form.text.errors %}
+                {{ post_form.title(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                    {% for error in post_form.text.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <br>
 
 
-<!-- SUBMIT -->
-    {{ post_form.submit() }}
-</form>
-
+            <!-- SUBMIT -->
+                {{ post_form.submit() }}
+    </form>
+</div>
 
 {% endblock %}

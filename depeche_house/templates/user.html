@@ -1,49 +1,76 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h1>USER ACCOUNT PAGE</h1>
-<p>Welcome {{ current_user.username }}</p>
-<p>You can edit and view your profile here!</p>
-<h2>Profile Picture:<img width="100" height="100" src="{{ image_file }}"></h2>
-<h2>Username: {{ current_user.username }}</h2>
-<h2>Email: {{ current_user.email }}</h2>
-<form method="post" action="" enctype="multipart/form-data">
-    {{ update_form.hidden_tag() }}
-
-<!-- USERNAME -->
-    {{ update_form.username.label }}
-    {{ update_form.username }}
-    {% if update_form.username.errors %}
-        {% for error in update_form.username.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
-    {% endif %}
+<br>
+<br>
+<br>
+<h3>Welcome {{ current_user.username }}</h3>
+<br>
+<br>
+<p>Profile Picture:</p>
+<div class="cotent-section">
+    <div class="media">
+        <div class="media-body">
+            <img width="100" height="100" src="{{ image_file }}">
+            <h4>Your details:</h4>
+            <p class="account-heading">Username: {{ current_user.username }}</p>
+            <p class="text-secondary">Email: {{ current_user.email }}</h2>
+        </div>
+    </div>
     <br>
-
-    
-<!-- EMAIL -->
-    {{ update_form.email.label }}
-    {{ update_form.email }}
-    {% if update_form.email.errors %}
-        {% for error in update_form.email.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
-    {% endif %}
     <br>
+    <form method="post" action="" enctype="multipart/form-data">
+        {{ update_form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Change account details</legend>
 
-<!-- PROFILE PICTURE -->
-    {{ update_form.profile_pic.label }}
-    {{ update_form.profile_pic }}
-    {% if update_form.profile_pic.errors %}
-        {% for error in update_form.profile_pic.errors %}
-            <span>{{ error }}</span><br>
-        {% endfor %}
-    {% endif %}
-    <br>
+                <!-- USERNAME -->
+                <div class="form-group">
+                {{ update_form.username.label (class="form-control-label") }}
+                {{ update_form.username (class="form-control form-control-lg is-invalid")}}
+                {% if update_form.username.errors %}
+                    {{ update_form.username(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                    {% for error in update_form.username.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+                <br>
+                
+                <!-- EMAIL -->
+                <div class="form-group">
+                {{ update_form.email.label (class="form-control-label") }}
+                {{ update_form.email (class="form-control form-control-lg is-invalid") }}
+                {% if update_form.email.errors %}
+                    {{ update_form.email(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                    {% for error in update_form.email.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+                <br>
+
+            <!-- PROFILE PICTURE -->
+            <div class="form-group">
+                {{ update_form.profile_pic.label (class="form-control-label") }}
+                {{ update_form.profile_pic }}
+                {% if update_form.profile_pic.errors %}
+                    {{ update_form.profile_pic(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                    {% for error in update_form.profile_pic.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                </div>
+                <br>
 
 
-<!-- UPDATE -->
-    {{ update_form.submit() }}
-</form>
+            <!-- UPDATE -->
+                {{ update_form.submit() }}
+            </form>
 {% endblock %}

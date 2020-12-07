@@ -2,18 +2,32 @@
 
 {% block content %}
 
-<h1>VIEW POST</h1>
+<br>
+<br>
+<br>
 
-<p>Edit or delete your post here</p>
+<h1>Edit Post</h1>
 
-    <img src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}">
-    {{ post.author.username }}
-    {{ post.date_posted.strftime('%d/%m/%Y') }}
-    {{ post.title }}
-    {{ post.content }}
-    {% if post.author == current_user %}
-    <a href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
-    <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</button>
-    {% endif %}
+
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            {{ post.author.username }}
+            {{ post.date_posted.strftime('%d/%m/%Y') }}
+        </div>
+        <div class="article-title">
+            <h2>{{ post.title }}</h2>
+        </div>
+        <div class="article-content">
+            <p>{{ post.content }}</p>
+        </div>
+        {% if post.author == current_user %}
+            <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+            <button type="button" class="btn btn-danger btn-sm m-1" href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+            </div>
+        </div>
+        {% endif %}
 
 {% endblock %}

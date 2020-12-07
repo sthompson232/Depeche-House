@@ -2,15 +2,24 @@
 
 {% block content %}
 
-<h1>THE FEED</h1>
+<br>
+<br>
+<br>
 
-<p>From here you will be able to see everyones posts!</p>
+<h1>The Feed</h1>
+
 {% for post in posts %}
-    <img src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}">
-    {{ post.author.username }}
-    {{ post.date_posted.strftime('%d/%m/%Y') }}
-    <a href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a>
-    {{ post.content }}
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    {{ post.author.username }}
+                    {{ post.date_posted.strftime('%d/%m/%Y') }}
+                </div>
+                <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+                <p class="article-content">{{ post.content }}</p>
+            </div>
+        </article>
 {% endfor %}
 
 {% endblock %}

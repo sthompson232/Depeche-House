@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.joined_at}')"
+        return f"{self.username}"
 
 #METHOD TO SET HASHED PASSWORD (USED WHEN FIRST REGISTERING A PASSWORD)
     def set_password(self, password):
