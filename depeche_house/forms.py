@@ -11,7 +11,7 @@ from depeche_house.models import User
 
 #REGISTRATION FORM 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=25)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=10)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=4, max=25)])
     password2 = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
