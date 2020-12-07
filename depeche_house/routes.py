@@ -84,7 +84,9 @@ def logout():
 @app.route('/home')
 @login_required
 def home():
-    posts = Post.query.all()
+    page = request.args.get('page', 1, type=int)
+    # POSTS ARE SORTED BY THEIR DATE IN DESCENDING ORDER. ALSO PAGINATED INTO PAGES
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template('home.html', posts=posts)
 
 
@@ -120,16 +122,22 @@ def save_profile_pic(uploaded_pic):
 @login_required
 def user():
     update_form = UpdateProfileForm()
-
+    # IF FORM HAS REQUIRED INFORMATION
     if update_form.validate_on_submit():
+        # IF THE PROFILE PICTURE WAS UPDATED
         if update_form.profile_pic.data:
+            # NEW VARIABLE CALLING THE SAVE PROFILE PIC FUNCTION
             picture_file = save_profile_pic(update_form.profile_pic.data)
+            # UPDATING THE DB WITH THE NEW PROFILE PIC
             current_user.profile_pic = picture_file
+        # UPDATE USERNAME AND EMAIL ON THE DB
         current_user.username = update_form.username.data
         current_user.email = update_form.email.data
         db.session.commit()
+        # FLASH MESSAGE AND REDIRECT
         flash('Your account has successfully been updated!', 'success')
         return redirect (url_for('user'))
+    # IF THERE IS NO POST METHOD THEN JUST GET THE CURRENT USERNAME AND EMAIL IN THE FORM FIELDS
     elif request.method == 'GET':
         update_form.username.data = current_user.username
         update_form.email.data = current_user.email
