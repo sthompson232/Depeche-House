@@ -1,13 +1,12 @@
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from depeche_house.models import User
 
+
 #FORMS
-
-
 
 #REGISTRATION FORM 
 class RegistrationForm(FlaskForm):
@@ -58,12 +57,3 @@ class UpdateProfileForm(FlaskForm):
             user_email = User.query.filter_by(email=email.data).first()
             if user_email:
                 raise ValidationError('This email has already been taken. Please choose another one.')
-
-
-
-#ADD POST FORM
-
-class AddPostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    text = TextAreaField('What would you like to say?', validators=[DataRequired()])
-    submit = SubmitField('Post')

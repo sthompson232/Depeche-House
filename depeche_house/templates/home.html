@@ -17,7 +17,7 @@
                     {{ post.author.username }}
                     {{ post.date_posted.strftime('%d/%m/%Y') }}
                 </div>
-                <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+                <h2><a class="article-title" href="{{ url_for('posts.post', post_id=post.id) }}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
             </div>
         </article>
@@ -33,9 +33,9 @@
     <!-- IF THE PAGE WE'RE ON IS EQUAL TO THE PAGE NUMBER -->
         {% if posts.page == page_num %}
         <!-- HAVE A DIFFERENT STYLED BUTTON WHEN YOURE ON THE CURRENT PAGE -->
-        <a class="btn btn-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+        <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
         {% else %}
-        <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a> 
+        <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a> 
         {% endif %}
     {% else %}
 

@@ -1,9 +1,15 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from depeche_house import db
+from depeche_house import db, login_manager
 from flask_login import UserMixin
 
 #DATABASE
+#user loader keeps the user logged in during the session
+@login_manager.user_loader
+#LOADS THE USER
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 #TABLE CONTAINING ALL USER INFORMATION IN THE SQLITE DATABASE
 class User(UserMixin, db.Model):
